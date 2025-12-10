@@ -1,0 +1,38 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(taskkill:*)",
+      "Bash(npm run init-db:*)",
+      "Bash(curl:*)",
+      "Bash(npm run dev:*)",
+      "Bash(dir \"c:\\AiAppDeployments\\RLMcoding\" /s /b /on)",
+      "Bash(powershell -Command:*)",
+      "Bash(npx tsx -e:*)",
+      "Bash(npx tsx:*)",
+      "Bash(dir:*)",
+      "Bash(npm run build:*)",
+      "Bash(git checkout:*)",
+      "Bash(npm install:*)",
+      "Bash(tasklist:*)",
+      "Bash(findstr:*)",
+      "Bash(cat:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(if not exist \"c:\\AiAppDeployments\\RLMcoding\\RLM\\docs\" mkdir \"c:\\AiAppDeployments\\RLMcoding\\RLM\\docs\")",
+      "Bash(if not exist \"C:\\AiAppDeployments\\RLMcoding\\rlm-app\\tests\\e2e\\fixtures\" mkdir \"C:\\AiAppDeployments\\RLMcoding\\rlm-app\\tests\\e2e\\fixtures\")",
+      "Bash(if not exist \"C:\\AiAppDeployments\\RLMcoding\\rlm-app\\tests\\e2e\\features\" mkdir \"C:\\AiAppDeployments\\RLMcoding\\rlm-app\\tests\\e2e\\features\")",
+      "Bash(tree:*)",
+      "Bash(npx create-next-app:*)",
+      "Bash(if not exist \"c:\\AiAppDeployments\\RLMcoding\\RLM\\specs\\research\" mkdir \"c:\\AiAppDeployments\\RLMcoding\\RLM\\specs\\research\")",
+      "Bash(npm run lint:*)",
+      "Bash(npx playwright:*)",
+      "Bash(find:*)",
+      "Bash(ls:*)",
+      "Bash(if not exist \"c:\\AiAppDeployments\\RLMcoding\\RLM\\research\\project\" mkdir \"c:\\AiAppDeployments\\RLMcoding\\RLM\\research\\project\")",
+      "Bash(if not exist \"c:\\AiAppDeployments\\RLMcoding\\RLM\\prompts\\patterns\" mkdir \"c:\\AiAppDeployments\\RLMcoding\\RLM\\prompts\\patterns\")",
+      "Bash(mkdir:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
