@@ -118,12 +118,25 @@ body {
 }
 
 /* ==========================================
-   MAP STYLING - CARTOON WORLD
+   MAP STYLING - CARTOON SNOWY WORLD
    ========================================== */
 
-/* Warmer, snow-covered map tiles */
+/* Transform light tiles into snowy winter wonderland */
 .leaflet-tile-pane {
-  filter: brightness(0.7) saturate(0.6) hue-rotate(-10deg) contrast(1.1);
+  filter: 
+    brightness(1.1) 
+    saturate(0.3) 
+    hue-rotate(190deg) 
+    contrast(0.9);
+}
+
+/* Snowy tiles class for extra winter effect */
+.snowy-tiles {
+  filter: 
+    brightness(1.15) 
+    saturate(0.25) 
+    sepia(0.1)
+    hue-rotate(180deg);
 }
 
 /* Add snow texture overlay to map */
@@ -135,11 +148,303 @@ body {
   right: 0;
   bottom: 0;
   background: 
-    radial-gradient(circle at 20% 80%, rgba(255,255,255,0.15) 0%, transparent 30%),
-    radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 25%),
-    radial-gradient(circle at 50% 50%, rgba(168, 218, 220, 0.1) 0%, transparent 50%);
+    radial-gradient(ellipse at 50% 0%, rgba(168, 218, 220, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 20% 80%, rgba(255,255,255,0.2) 0%, transparent 30%),
+    radial-gradient(circle at 80% 20%, rgba(255,255,255,0.15) 0%, transparent 25%),
+    radial-gradient(circle at 50% 50%, rgba(241, 250, 238, 0.1) 0%, transparent 60%);
   pointer-events: none;
   z-index: 1;
+}
+
+/* ==========================================
+   LANDMARK MARKERS - DISCOVERABLE FUN!
+   ========================================== */
+
+.landmark-marker {
+  z-index: 100 !important;
+}
+
+.landmark-icon {
+  font-size: 2rem;
+  filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.3));
+  cursor: pointer;
+  transition: all 0.3s var(--bounce);
+  animation: landmarkFloat 3s ease-in-out infinite;
+}
+
+.landmark-icon:hover {
+  transform: scale(1.3);
+  filter: drop-shadow(3px 3px 0px rgba(0,0,0,0.4));
+}
+
+.landmark-bounce .landmark-icon {
+  animation: landmarkBounce 0.5s var(--bounce);
+}
+
+@keyframes landmarkFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+@keyframes landmarkBounce {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.4); }
+  100% { transform: scale(1); }
+}
+
+/* Landmark popup - kid-friendly style */
+.landmark-popup-container .leaflet-popup-content-wrapper {
+  background: var(--color-bg-card);
+  border: var(--border-cartoon);
+  border-radius: var(--radius-cartoon);
+  box-shadow: var(--shadow-cartoon);
+  padding: 0;
+  overflow: hidden;
+}
+
+.landmark-popup-container .leaflet-popup-tip {
+  background: var(--color-sky-dark);
+}
+
+.landmark-popup {
+  text-align: center;
+  padding: var(--space-md);
+}
+
+.landmark-popup-emoji {
+  font-size: 3rem;
+  margin-bottom: var(--space-sm);
+  animation: landmarkPopupBounce 1s var(--bounce);
+}
+
+@keyframes landmarkPopupBounce {
+  0% { transform: scale(0) rotate(-180deg); }
+  60% { transform: scale(1.2) rotate(10deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+.landmark-popup-title {
+  font-family: var(--font-display);
+  color: var(--color-sky-dark);
+  font-size: 1.2rem;
+  margin: 0 0 var(--space-sm) 0;
+}
+
+.landmark-popup-fact {
+  color: var(--color-elf-green);
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin: 0;
+  background: var(--color-frost);
+  padding: var(--space-sm);
+  border-radius: var(--radius-cartoon);
+}
+
+/* ==========================================
+   VISITED LOCATION POPUPS
+   ========================================== */
+
+.visited-popup-container .leaflet-popup-content-wrapper {
+  background: linear-gradient(135deg, var(--color-santa-red) 0%, var(--color-santa-red-light) 100%);
+  border: 3px solid var(--color-sky-dark);
+  border-radius: var(--radius-cartoon);
+  box-shadow: var(--shadow-cartoon);
+  color: white;
+}
+
+.visited-popup-container .leaflet-popup-tip {
+  background: var(--color-santa-red);
+}
+
+.visited-popup {
+  text-align: center;
+  padding: var(--space-sm);
+}
+
+.visited-popup h3 {
+  font-family: var(--font-display);
+  margin: 0 0 var(--space-xs) 0;
+  font-size: 1.1rem;
+}
+
+.visited-popup p {
+  margin: 0;
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+/* Present markers - bigger and bouncier */
+.cartoon-present {
+  z-index: 200 !important;
+}
+
+.present-icon {
+  font-size: 1.8rem;
+  filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.3));
+  cursor: pointer;
+  transition: transform 0.3s var(--bounce);
+}
+
+.present-icon:hover {
+  transform: scale(1.3) rotate(10deg);
+}
+
+.present-dropped .present-icon {
+  animation: presentLand 0.6s var(--bounce);
+}
+
+@keyframes presentLand {
+  0% { transform: translateY(-100px) rotate(180deg) scale(0); opacity: 0; }
+  60% { transform: translateY(10px) rotate(-10deg) scale(1.2); }
+  100% { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
+}
+
+/* ==========================================
+   SANTA MARKER - SUPER SIZED & MAGICAL
+   ========================================== */
+
+.santa-marker {
+  z-index: 1000 !important;
+}
+
+.santa-icon-container {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.santa-glow {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, rgba(255, 214, 10, 0.4) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: santaGlow 2s ease-in-out infinite;
+}
+
+@keyframes santaGlow {
+  0%, 100% { transform: scale(1); opacity: 0.6; }
+  50% { transform: scale(1.3); opacity: 0.8; }
+}
+
+.santa-sleigh {
+  font-size: 3.5rem;
+  position: relative;
+  z-index: 2;
+  filter: drop-shadow(3px 3px 0px rgba(0,0,0,0.3));
+  animation: santaFloat 3s ease-in-out infinite;
+}
+
+.santa-reindeer {
+  position: absolute;
+  font-size: 1.5rem;
+  top: 10px;
+  left: 5px;
+  z-index: 1;
+  animation: reindeerPull 0.5s ease-in-out infinite;
+}
+
+@keyframes reindeerPull {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(-3px); }
+}
+
+.santa-trail {
+  position: absolute;
+  bottom: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 10px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+  border-radius: 50%;
+  animation: trailSparkle 1s ease-in-out infinite;
+}
+
+@keyframes trailSparkle {
+  0%, 100% { opacity: 0.3; width: 40px; }
+  50% { opacity: 0.8; width: 60px; }
+}
+
+/* ==========================================
+   FLIGHT PATH - MAGICAL SPARKLE TRAIL
+   ========================================== */
+
+.magical-path {
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.5));
+}
+
+.sparkle-path {
+  animation: sparkleFlow 2s linear infinite;
+}
+
+@keyframes sparkleFlow {
+  0% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: -50; }
+}
+
+.flight-path-animate {
+  animation: pathDraw 1s ease-out forwards;
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+}
+
+@keyframes pathDraw {
+  to { stroke-dashoffset: 0; }
+}
+
+/* ==========================================
+   REINDEER ON PATH - FLYING HELPERS
+   ========================================== */
+
+.reindeer-marker {
+  z-index: 600 !important;
+}
+
+.reindeer-icon {
+  font-size: 1.5rem;
+  filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.3));
+  animation: reindeerFly 2s ease-in-out infinite;
+}
+
+@keyframes reindeerFly {
+  0%, 100% { transform: translateY(0) rotate(-5deg); }
+  25% { transform: translateY(-8px) rotate(0deg); }
+  50% { transform: translateY(-3px) rotate(5deg); }
+  75% { transform: translateY(-10px) rotate(0deg); }
+}
+
+/* ==========================================
+   MAP CLICK SNOW BURST EFFECT
+   ========================================== */
+
+.map-snow-burst {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+}
+
+.burst-flake {
+  position: absolute;
+  font-size: 1.5rem;
+  animation: burstOut 1s ease-out forwards;
+  transform-origin: center center;
+}
+
+@keyframes burstOut {
+  0% {
+    transform: rotate(var(--angle)) translateX(0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(var(--angle)) translateX(60px) scale(0);
+    opacity: 0;
+  }
 }
 
 /* ==========================================
