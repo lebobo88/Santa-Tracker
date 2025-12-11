@@ -716,42 +716,28 @@ function toggleSound() {
 // CHRISTMAS MUSIC (Synthesized)
 // ==========================================
 
-let musicInterval = null;
-let musicGain = null;
+let musicPlaying = false;
+let musicOscillators = [];
+let masterGain = null;
 
-// Jingle Bells melody notes (frequency in Hz, duration in beats)
-const jingleBells = [
-  // "Jingle bells, jingle bells"
-  { note: 'E4', duration: 1 }, { note: 'E4', duration: 1 }, { note: 'E4', duration: 2 },
-  { note: 'E4', duration: 1 }, { note: 'E4', duration: 1 }, { note: 'E4', duration: 2 },
-  // "Jingle all the way"
-  { note: 'E4', duration: 1 }, { note: 'G4', duration: 1 }, { note: 'C4', duration: 1 }, { note: 'D4', duration: 1 }, { note: 'E4', duration: 4 },
-  // "Oh what fun it is to ride"
-  { note: 'F4', duration: 1 }, { note: 'F4', duration: 1 }, { note: 'F4', duration: 1 }, { note: 'F4', duration: 1 },
-  { note: 'F4', duration: 1 }, { note: 'E4', duration: 1 }, { note: 'E4', duration: 1 }, { note: 'E4', duration: 0.5 }, { note: 'E4', duration: 0.5 },
-  // "In a one horse open sleigh"
-  { note: 'E4', duration: 1 }, { note: 'D4', duration: 1 }, { note: 'D4', duration: 1 }, { note: 'E4', duration: 1 }, { note: 'D4', duration: 2 }, { note: 'G4', duration: 2 },
-  // Rest
-  { note: 'REST', duration: 2 },
-  // "Dashing through the snow"
-  { note: 'E4', duration: 1 }, { note: 'E4', duration: 1 }, { note: 'E4', duration: 2 },
-  { note: 'E4', duration: 1 }, { note: 'E4', duration: 1 }, { note: 'E4', duration: 2 },
-  // "In a one horse open sleigh"
-  { note: 'E4', duration: 1 }, { note: 'G4', duration: 1 }, { note: 'C4', duration: 1.5 }, { note: 'D4', duration: 0.5 }, { note: 'E4', duration: 4 },
-  // Rest before repeat
-  { note: 'REST', duration: 4 }
+// Jingle Bells melody - simpler format [note, duration in ms]
+const jingleBellsMelody = [
+  ['E5', 300], ['E5', 300], ['E5', 600],
+  ['E5', 300], ['E5', 300], ['E5', 600],
+  ['E5', 300], ['G5', 300], ['C5', 400], ['D5', 200], ['E5', 800],
+  ['F5', 300], ['F5', 300], ['F5', 400], ['F5', 200],
+  ['F5', 300], ['E5', 300], ['E5', 200], ['E5', 200],
+  ['E5', 300], ['D5', 300], ['D5', 300], ['E5', 300], ['D5', 600], ['G5', 600],
+  ['REST', 600],
 ];
 
-// Note frequencies
-const noteFrequencies = {
+// Note frequencies (octave 5 for brighter sound)
+const notes = {
+  'C5': 523.25, 'D5': 587.33, 'E5': 659.25, 'F5': 698.46,
+  'G5': 783.99, 'A5': 880.00, 'B5': 987.77,
   'C4': 261.63, 'D4': 293.66, 'E4': 329.63, 'F4': 349.23,
-  'G4': 392.00, 'A4': 440.00, 'B4': 493.88, 'C5': 523.25,
-  'D5': 587.33, 'E5': 659.25, 'G5': 783.99, 'REST': 0
+  'G4': 392.00, 'REST': 0
 };
-
-let currentNoteIndex = 0;
-let musicStartTime = 0;
-const BEAT_DURATION = 200; // ms per beat
 
 function toggleMusic() {
   const btn = document.getElementById('music-toggle');
@@ -765,111 +751,113 @@ function toggleMusic() {
     }
     showToast('🔇 Music stopped', 'info');
   } else {
-    startMusic();
-    state.musicPlaying = true;
-    if (btn) {
-      btn.innerHTML = '🎶';
-      btn.classList.add('playing');
+    // Initialize audio context on user gesture
+    if (!audioContext) {
+      audioContext = new (window.AudioContext || window.webkitAudioContext)();
     }
-    showToast('🎵 Playing Jingle Bells!', 'info');
+    
+    // MUST resume on user gesture for browsers
+    audioContext.resume().then(() => {
+      state.musicPlaying = true;
+      playJingleBells();
+      if (btn) {
+        btn.innerHTML = '🎶';
+        btn.classList.add('playing');
+      }
+      showToast('🎵 Playing Jingle Bells!', 'info');
+    }).catch(err => {
+      console.error('Music failed to start:', err);
+      showToast('❌ Could not play music', 'info');
+    });
   }
 }
 
-function startMusic() {
-  if (!audioContext) {
-    audioContext = new (window.AudioContext || window.webkitAudioContext)();
-  }
+async function playJingleBells() {
+  if (!audioContext) return;
   
-  // Resume audio context if suspended
-  if (audioContext.state === 'suspended') {
-    audioContext.resume();
-  }
+  // Create master gain
+  masterGain = audioContext.createGain();
+  masterGain.gain.value = 0.5; // Good volume
+  masterGain.connect(audioContext.destination);
   
-  // Create master gain for music
-  musicGain = audioContext.createGain();
-  musicGain.gain.value = 0.15;
-  musicGain.connect(audioContext.destination);
-  
-  currentNoteIndex = 0;
-  musicStartTime = audioContext.currentTime;
-  
-  // Schedule all notes
-  scheduleMusic();
-}
-
-function scheduleMusic() {
-  if (!state.musicPlaying || !audioContext || !musicGain) return;
-  
-  let time = audioContext.currentTime;
-  
-  // Schedule next batch of notes
-  for (let i = 0; i < jingleBells.length; i++) {
-    const noteIndex = (currentNoteIndex + i) % jingleBells.length;
-    const noteData = jingleBells[noteIndex];
-    const noteDuration = noteData.duration * BEAT_DURATION / 1000;
-    
-    if (noteData.note !== 'REST') {
-      playMusicNote(noteFrequencies[noteData.note], time, noteDuration * 0.9);
+  while (state.musicPlaying) {
+    for (const [note, duration] of jingleBellsMelody) {
+      if (!state.musicPlaying) break;
+      
+      if (note !== 'REST' && notes[note]) {
+        playNote(notes[note], duration * 0.85);
+      }
+      
+      await sleep(duration);
     }
     
-    time += noteDuration;
-  }
-  
-  // Schedule next iteration
-  const totalDuration = jingleBells.reduce((sum, n) => sum + n.duration, 0) * BEAT_DURATION;
-  
-  musicInterval = setTimeout(() => {
+    // Small pause between loops
     if (state.musicPlaying) {
-      scheduleMusic();
+      await sleep(500);
     }
-  }, totalDuration);
+  }
 }
 
-function playMusicNote(frequency, startTime, duration) {
-  if (!audioContext || !musicGain || frequency === 0) return;
+function playNote(frequency, duration) {
+  if (!audioContext || !masterGain || !state.musicPlaying) return;
   
-  const oscillator = audioContext.createOscillator();
-  const noteGain = audioContext.createGain();
-  
-  // Use a softer waveform for pleasant sound
-  oscillator.type = 'sine';
-  oscillator.frequency.value = frequency;
-  
-  // Add slight vibrato for warmth
-  const vibrato = audioContext.createOscillator();
-  const vibratoGain = audioContext.createGain();
-  vibrato.frequency.value = 5;
-  vibratoGain.gain.value = 3;
-  vibrato.connect(vibratoGain);
-  vibratoGain.connect(oscillator.frequency);
-  
-  oscillator.connect(noteGain);
-  noteGain.connect(musicGain);
-  
-  // Envelope for softer attack/release
-  noteGain.gain.setValueAtTime(0, startTime);
-  noteGain.gain.linearRampToValueAtTime(0.3, startTime + 0.05);
-  noteGain.gain.linearRampToValueAtTime(0.2, startTime + duration * 0.5);
-  noteGain.gain.linearRampToValueAtTime(0, startTime + duration);
-  
-  oscillator.start(startTime);
-  oscillator.stop(startTime + duration + 0.1);
-  vibrato.start(startTime);
-  vibrato.stop(startTime + duration + 0.1);
+  try {
+    const osc = audioContext.createOscillator();
+    const gain = audioContext.createGain();
+    
+    // Triangle wave sounds more like bells
+    osc.type = 'triangle';
+    osc.frequency.value = frequency;
+    
+    osc.connect(gain);
+    gain.connect(masterGain);
+    
+    const now = audioContext.currentTime;
+    const endTime = now + duration / 1000;
+    
+    // Bell-like envelope
+    gain.gain.setValueAtTime(0.001, now);
+    gain.gain.exponentialRampToValueAtTime(0.5, now + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.3, now + 0.1);
+    gain.gain.exponentialRampToValueAtTime(0.001, endTime);
+    
+    osc.start(now);
+    osc.stop(endTime + 0.1);
+    
+    // Add a harmonic for richer sound
+    const osc2 = audioContext.createOscillator();
+    const gain2 = audioContext.createGain();
+    osc2.type = 'sine';
+    osc2.frequency.value = frequency * 2; // Octave higher
+    osc2.connect(gain2);
+    gain2.connect(masterGain);
+    gain2.gain.setValueAtTime(0.001, now);
+    gain2.gain.exponentialRampToValueAtTime(0.15, now + 0.02);
+    gain2.gain.exponentialRampToValueAtTime(0.001, endTime);
+    osc2.start(now);
+    osc2.stop(endTime + 0.1);
+    
+  } catch (e) {
+    console.log('Note play error:', e);
+  }
+}
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 function stopMusic() {
-  if (musicInterval) {
-    clearTimeout(musicInterval);
-    musicInterval = null;
+  state.musicPlaying = false;
+  
+  if (masterGain && audioContext) {
+    try {
+      masterGain.gain.linearRampToValueAtTime(0.001, audioContext.currentTime + 0.3);
+    } catch (e) {}
   }
   
-  if (musicGain) {
-    musicGain.gain.linearRampToValueAtTime(0, audioContext.currentTime + 0.5);
-    setTimeout(() => {
-      musicGain = null;
-    }, 600);
-  }
+  setTimeout(() => {
+    masterGain = null;
+  }, 400);
 }
 
 // ==========================================
