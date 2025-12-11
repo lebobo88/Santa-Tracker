@@ -7,6 +7,7 @@ import { initMap } from './map.js';
 import { initSanta } from './santa.js';
 import { initAnimations } from './animations.js';
 import { initShare } from './share.js';
+import { initPanel } from './panel.js';
 
 // Loading screen element
 let loadingScreen;
@@ -38,6 +39,10 @@ async function init() {
     // Initialize share functionality
     console.log('Initializing share...');
     initShare();
+
+    // Initialize mobile panel controller
+    console.log('Initializing panel...');
+    initPanel();
 
     // Hide loading screen
     hideLoadingScreen();

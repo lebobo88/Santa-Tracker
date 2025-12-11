@@ -201,6 +201,15 @@ body {
   border: 1px solid var(--color-border);
 }
 
+/* Mobile Bottom Sheet Elements - Hidden on Desktop */
+.panel-handle {
+  display: none;
+}
+
+.panel-peek {
+  display: none;
+}
+
 .panel-header {
   text-align: center;
   margin-bottom: var(--space-lg);

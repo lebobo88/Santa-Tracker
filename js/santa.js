@@ -5,6 +5,7 @@
 
 import { getNewRandomLocation, getLocalTime } from './locations.js';
 import { updateSantaPosition, addVisitedMarker, showArrivalEffect } from './map.js';
+import { updatePeekContent } from './panel.js';
 
 // Santa state
 let currentLocation = null;
@@ -116,9 +117,10 @@ function scheduleNextMove() {
 function updateCountdown() {
   const remaining = Math.max(0, nextMoveTime - Date.now());
   const seconds = Math.ceil(remaining / 1000);
+  const countdownText = `${seconds}s`;
 
   if (countdownEl) {
-    countdownEl.textContent = `${seconds}s`;
+    countdownEl.textContent = countdownText;
 
     // Add pulse effect when close
     if (seconds <= 5) {
@@ -127,6 +129,9 @@ function updateCountdown() {
       countdownEl.classList.remove('animate-pulse-glow');
     }
   }
+
+  // Update mobile peek countdown
+  updatePeekContent(null, null, countdownText);
 }
 
 /**
@@ -142,6 +147,9 @@ function updateLocationUI() {
   if (countryNameEl) {
     countryNameEl.textContent = currentLocation.country;
   }
+
+  // Update mobile peek content
+  updatePeekContent(currentLocation.city, currentLocation.country, null);
 
   updateLocalTime();
 }
