@@ -713,38 +713,162 @@ function toggleSound() {
 }
 
 // ==========================================
-// CHRISTMAS MUSIC
+// CHRISTMAS MUSIC (Synthesized)
 // ==========================================
 
-let musicAudio = null;
+let musicInterval = null;
+let musicGain = null;
+
+// Jingle Bells melody notes (frequency in Hz, duration in beats)
+const jingleBells = [
+  // "Jingle bells, jingle bells"
+  { note: 'E4', duration: 1 }, { note: 'E4', duration: 1 }, { note: 'E4', duration: 2 },
+  { note: 'E4', duration: 1 }, { note: 'E4', duration: 1 }, { note: 'E4', duration: 2 },
+  // "Jingle all the way"
+  { note: 'E4', duration: 1 }, { note: 'G4', duration: 1 }, { note: 'C4', duration: 1 }, { note: 'D4', duration: 1 }, { note: 'E4', duration: 4 },
+  // "Oh what fun it is to ride"
+  { note: 'F4', duration: 1 }, { note: 'F4', duration: 1 }, { note: 'F4', duration: 1 }, { note: 'F4', duration: 1 },
+  { note: 'F4', duration: 1 }, { note: 'E4', duration: 1 }, { note: 'E4', duration: 1 }, { note: 'E4', duration: 0.5 }, { note: 'E4', duration: 0.5 },
+  // "In a one horse open sleigh"
+  { note: 'E4', duration: 1 }, { note: 'D4', duration: 1 }, { note: 'D4', duration: 1 }, { note: 'E4', duration: 1 }, { note: 'D4', duration: 2 }, { note: 'G4', duration: 2 },
+  // Rest
+  { note: 'REST', duration: 2 },
+  // "Dashing through the snow"
+  { note: 'E4', duration: 1 }, { note: 'E4', duration: 1 }, { note: 'E4', duration: 2 },
+  { note: 'E4', duration: 1 }, { note: 'E4', duration: 1 }, { note: 'E4', duration: 2 },
+  // "In a one horse open sleigh"
+  { note: 'E4', duration: 1 }, { note: 'G4', duration: 1 }, { note: 'C4', duration: 1.5 }, { note: 'D4', duration: 0.5 }, { note: 'E4', duration: 4 },
+  // Rest before repeat
+  { note: 'REST', duration: 4 }
+];
+
+// Note frequencies
+const noteFrequencies = {
+  'C4': 261.63, 'D4': 293.66, 'E4': 329.63, 'F4': 349.23,
+  'G4': 392.00, 'A4': 440.00, 'B4': 493.88, 'C5': 523.25,
+  'D5': 587.33, 'E5': 659.25, 'G5': 783.99, 'REST': 0
+};
+
+let currentNoteIndex = 0;
+let musicStartTime = 0;
+const BEAT_DURATION = 200; // ms per beat
 
 function toggleMusic() {
   const btn = document.getElementById('music-toggle');
   
   if (state.musicPlaying) {
-    if (musicAudio) {
-      musicAudio.pause();
-    }
+    stopMusic();
     state.musicPlaying = false;
     if (btn) {
       btn.innerHTML = '🎵';
       btn.classList.remove('playing');
     }
+    showToast('🔇 Music stopped', 'info');
   } else {
-    // Create audio element with royalty-free Christmas music URL
-    // Note: In production, you'd host your own audio file
-    if (!musicAudio) {
-      musicAudio = new Audio();
-      musicAudio.loop = true;
-      musicAudio.volume = 0.3;
-      // Using a placeholder - in production use actual hosted music
-      showToast('🎵 Christmas music would play here!', 'info');
-    }
+    startMusic();
     state.musicPlaying = true;
     if (btn) {
       btn.innerHTML = '🎶';
       btn.classList.add('playing');
     }
+    showToast('🎵 Playing Jingle Bells!', 'info');
+  }
+}
+
+function startMusic() {
+  if (!audioContext) {
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  
+  // Resume audio context if suspended
+  if (audioContext.state === 'suspended') {
+    audioContext.resume();
+  }
+  
+  // Create master gain for music
+  musicGain = audioContext.createGain();
+  musicGain.gain.value = 0.15;
+  musicGain.connect(audioContext.destination);
+  
+  currentNoteIndex = 0;
+  musicStartTime = audioContext.currentTime;
+  
+  // Schedule all notes
+  scheduleMusic();
+}
+
+function scheduleMusic() {
+  if (!state.musicPlaying || !audioContext || !musicGain) return;
+  
+  let time = audioContext.currentTime;
+  
+  // Schedule next batch of notes
+  for (let i = 0; i < jingleBells.length; i++) {
+    const noteIndex = (currentNoteIndex + i) % jingleBells.length;
+    const noteData = jingleBells[noteIndex];
+    const noteDuration = noteData.duration * BEAT_DURATION / 1000;
+    
+    if (noteData.note !== 'REST') {
+      playMusicNote(noteFrequencies[noteData.note], time, noteDuration * 0.9);
+    }
+    
+    time += noteDuration;
+  }
+  
+  // Schedule next iteration
+  const totalDuration = jingleBells.reduce((sum, n) => sum + n.duration, 0) * BEAT_DURATION;
+  
+  musicInterval = setTimeout(() => {
+    if (state.musicPlaying) {
+      scheduleMusic();
+    }
+  }, totalDuration);
+}
+
+function playMusicNote(frequency, startTime, duration) {
+  if (!audioContext || !musicGain || frequency === 0) return;
+  
+  const oscillator = audioContext.createOscillator();
+  const noteGain = audioContext.createGain();
+  
+  // Use a softer waveform for pleasant sound
+  oscillator.type = 'sine';
+  oscillator.frequency.value = frequency;
+  
+  // Add slight vibrato for warmth
+  const vibrato = audioContext.createOscillator();
+  const vibratoGain = audioContext.createGain();
+  vibrato.frequency.value = 5;
+  vibratoGain.gain.value = 3;
+  vibrato.connect(vibratoGain);
+  vibratoGain.connect(oscillator.frequency);
+  
+  oscillator.connect(noteGain);
+  noteGain.connect(musicGain);
+  
+  // Envelope for softer attack/release
+  noteGain.gain.setValueAtTime(0, startTime);
+  noteGain.gain.linearRampToValueAtTime(0.3, startTime + 0.05);
+  noteGain.gain.linearRampToValueAtTime(0.2, startTime + duration * 0.5);
+  noteGain.gain.linearRampToValueAtTime(0, startTime + duration);
+  
+  oscillator.start(startTime);
+  oscillator.stop(startTime + duration + 0.1);
+  vibrato.start(startTime);
+  vibrato.stop(startTime + duration + 0.1);
+}
+
+function stopMusic() {
+  if (musicInterval) {
+    clearTimeout(musicInterval);
+    musicInterval = null;
+  }
+  
+  if (musicGain) {
+    musicGain.gain.linearRampToValueAtTime(0, audioContext.currentTime + 0.5);
+    setTimeout(() => {
+      musicGain = null;
+    }, 600);
   }
 }
 
