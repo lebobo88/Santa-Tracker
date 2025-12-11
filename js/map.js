@@ -22,9 +22,8 @@ const MAP_CONFIG = {
   maxBoundsViscosity: 1.0
 };
 
-// Use a lighter, more kid-friendly map style (Positron/Light)
-// This creates a "snowy" effect when combined with our CSS filters
-const TILE_URL = 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
+// Use dark map tiles for Christmas night theme - better visibility
+const TILE_URL = 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
 const TILE_ATTRIBUTION = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>';
 
 // Famous landmarks for kids to discover
@@ -61,12 +60,11 @@ export function initMap() {
     worldCopyJump: true
   });
 
-  // Add light/snowy tile layer (CSS filters make it look snowy)
+  // Add dark tile layer for Christmas night theme
   L.tileLayer(TILE_URL, {
     attribution: TILE_ATTRIBUTION,
     subdomains: 'abcd',
-    maxZoom: 19,
-    className: 'snowy-tiles'
+    maxZoom: 19
   }).addTo(map);
 
   // Position zoom controls

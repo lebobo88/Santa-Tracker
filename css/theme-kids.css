@@ -121,25 +121,16 @@ body {
    MAP STYLING - CARTOON SNOWY WORLD
    ========================================== */
 
-/* Transform light tiles into snowy winter wonderland */
+/* Keep map visible with subtle winter tint */
 .leaflet-tile-pane {
   filter: 
-    brightness(1.1) 
-    saturate(0.3) 
-    hue-rotate(190deg) 
-    contrast(0.9);
+    brightness(0.85) 
+    saturate(0.7) 
+    hue-rotate(-10deg) 
+    contrast(1.1);
 }
 
-/* Snowy tiles class for extra winter effect */
-.snowy-tiles {
-  filter: 
-    brightness(1.15) 
-    saturate(0.25) 
-    sepia(0.1)
-    hue-rotate(180deg);
-}
-
-/* Add snow texture overlay to map */
+/* Add subtle frost overlay to map - NOT too white */
 #map::after {
   content: '';
   position: absolute;
@@ -148,10 +139,9 @@ body {
   right: 0;
   bottom: 0;
   background: 
-    radial-gradient(ellipse at 50% 0%, rgba(168, 218, 220, 0.3) 0%, transparent 50%),
-    radial-gradient(circle at 20% 80%, rgba(255,255,255,0.2) 0%, transparent 30%),
-    radial-gradient(circle at 80% 20%, rgba(255,255,255,0.15) 0%, transparent 25%),
-    radial-gradient(circle at 50% 50%, rgba(241, 250, 238, 0.1) 0%, transparent 60%);
+    radial-gradient(ellipse at 50% 0%, rgba(168, 218, 220, 0.15) 0%, transparent 40%),
+    radial-gradient(circle at 20% 80%, rgba(255,255,255,0.08) 0%, transparent 30%),
+    radial-gradient(circle at 80% 20%, rgba(255,255,255,0.08) 0%, transparent 25%);
   pointer-events: none;
   z-index: 1;
 }
