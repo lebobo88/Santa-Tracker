@@ -1,436 +1,242 @@
-# RLM AI Agent Development System
+# 🎅 Santa Tracker
 
-**Transform Ideas into Production Code with AI Agents in Any IDE**
+**Track Santa's magical journey around the globe on Christmas Eve!**
 
-The RLM (Research-Lead-Manage) system is a comprehensive AI agent workflow that enables fully automated development from initial idea discovery through implementation to production deployment.
+A fun, interactive web application that lets kids (and kids at heart) follow Santa Claus as he delivers presents to children worldwide.
 
+[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen)](https://your-deployment-url.netlify.app)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/version-1.1.0-blue.svg)](https://github.com/your-org/rlm-system)
 
-**Works with:** Claude Code • Cursor • Windsurf • VS Code + Copilot • Aider • Continue.dev • Any AI Agent
+---
+
+## ✨ Features
+
+### 🗺️ Interactive World Map
+- **Snowy winter theme** - White land masses and icy blue oceans
+- **Famous landmarks** - Discover 12 world landmarks with fun facts (Eiffel Tower, Pyramids, etc.)
+- **Click interactions** - Tap anywhere to create snowflake bursts!
+- **Flight paths** - Watch Santa's magical golden trail with animated reindeer
+
+### 🎄 Two Modes
+
+#### **Christmas Day (December 25th)**
+- Santa travels around the world delivering presents
+- Real-time tracking with city-to-city movement
+- Stats: Presents Delivered, Cities Visited
+- Countdown to next stop
+
+#### **Workshop Mode (All Other Days)**
+- Santa is at the North Pole with his elves
+- Fun activity updates (building toys, checking lists, feeding reindeer)
+- Stats: Presents Made, Elves Working  
+- Countdown to Christmas!
+
+### 🎨 Kid-Friendly Design
+- **Cartoon-style UI** with bouncy animations
+- **Big, tappable elements** perfect for little fingers
+- **Playful fonts** (Fredoka One, Nunito)
+- **Cheerful color palette** - Santa red, elf green, magic gold
+
+### 🎵 Fun Extras
+- **Christmas music** - Synthesized Jingle Bells
+- **Sound effects** - Sleigh bells and fanfares
+- **Snowfall animation** - Beautiful canvas-based snow
+- **Floating decorations** - Presents, stars, and snowflakes
+- **Aurora borealis** - Special effect for northern locations
+
+### 📱 Mobile-Friendly
+- **Collapsible bottom sheet** - Swipe up/down to expand
+- **Peek preview** - Always see Santa's current location
+- **Touch gestures** - Intuitive mobile interactions
+- **Responsive design** - Works on all screen sizes
 
 ---
 
 ## 🚀 Quick Start
 
-### Option 1: AI-Powered Discovery (Recommended)
+### Prerequisites
+- Node.js 18+
+- npm or yarn
+
+### Installation
+
 ```bash
-# Claude Code
-/discover Build a task management app with AI prioritization
+# Clone the repository
+git clone https://github.com/your-username/santa-tracker.git
+cd santa-tracker
 
-# Or PowerShell (any IDE)
-./RLM/commands/rlm-discover.ps1 --idea "Your project idea"
+# Install dependencies
+npm install
 
-# Then run implementation
-./RLM/commands/rlm-build.sh --mode supervised
+# Start development server
+npm run dev
 ```
 
-### Option 2: Traditional Setup
+Open http://localhost:3000 in your browser!
+
+### Build for Production
+
 ```bash
-# 1. Initialize RLM
-./RLM/commands/rlm-init.sh --ide cursor --tech-stack node
-
-# 2. Configure
-cp RLM/.env.example .env
-nano .env  # Add your GitHub token and AI API key
-
-# 3. Discover your feature (AI-powered spec generation)
-/discover Build a user authentication system
-
-# 4. Run automated build!
-./RLM/commands/rlm-build.sh --mode supervised
+npm run build
 ```
 
-**See [Quick Start Guide](RLM/docs/QUICK-START.md) for detailed walkthrough.**
+The built files will be in the `dist/` folder.
 
 ---
 
-## 🎯 What is RLM?
+## 🛠️ Tech Stack
 
-RLM is an automated AI agent development workflow that:
-
-✅ **Discovers requirements** from your raw ideas with AI-powered research
-✅ **Creates specifications** through intelligent clarifying questions
-✅ **Designs architecture** with the Master Architect Agent
-✅ **Implements code** using Test-Driven Development
-✅ **Runs comprehensive tests** automatically
-✅ **Debugs and fixes** issues autonomously
-✅ **Deploys to production** with CI/CD automation
-✅ **Works with any IDE** - Claude Code, Cursor, Windsurf, VS Code, and more  
-
-### The Problem
-
-Traditional AI-assisted development:
-- ❌ Loses context across sessions
-- ❌ Requires manual coordination
-- ❌ Lacks traceability
-- ❌ Produces untested code
-- ❌ Has no PM integration
-
-### The Solution
-
-RLM provides:
-- ✅ Persistent context in version control
-- ✅ Automated agent orchestration
-- ✅ Complete traceability
-- ✅ TDD with comprehensive tests
-- ✅ Seamless PM-developer workflow
-
----
-
-## 🏗️ Architecture
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│              PRODUCT MANAGEMENT WEB APP                     │
-│       Research • Roadmapping • Sprint Planning              │
-└────────────────────┬────────────────────────────────────────┘
-                     │ Push Specs
-                     ▼
-┌─────────────────────────────────────────────────────────────┐
-│                  GITHUB REPOSITORY                          │
-│           Version-Controlled Specifications                 │
-└────────────────────┬────────────────────────────────────────┘
-                     │ Pull Instructions
-                     ▼
-┌─────────────────────────────────────────────────────────────┐
-│           LOCAL DEVELOPMENT (AI AGENTS)                     │
-│  Master Architect → Implementation → Testing → DevOps       │
-│  • Code Generation (TDD)                                    │
-│  • Automated Testing                                        │
-│  • CI/CD Execution                                          │
-└────────────────────┬────────────────────────────────────────┘
-                     │ Push Progress
-                     ▼
-┌─────────────────────────────────────────────────────────────┐
-│              FEEDBACK LOOP (Back to PM)                     │
-│  Completed Work • Test Results • Issues • Metrics          │
-└─────────────────────────────────────────────────────────────┘
-```
-
----
-
-## 🎨 Key Features
-
-### 1. AI-Powered Discovery (New!)
-Transform raw ideas into production-ready specs:
-```bash
-/discover Build a real-time chat app with AI moderation
-```
-The Research Agent will:
-- Analyze your idea and research competitors
-- Ask prioritized clarifying questions
-- Generate comprehensive specifications
-- Create architecture recommendations
-
-### 2. Multi-Agent System
-- **Research Agent** - Idea analysis and spec creation
-- **Master Architect** - System design and technical decisions
-- **Implementation Agent** - TDD code generation
-- **Testing Agent** - Comprehensive test automation
-- **DevOps Agent** - CI/CD and deployment
-
-### 3. Universal IDE Compatibility
-Works with **any AI coding environment**:
-- **Claude Code** - Native `/discover` slash command
-- **Cursor** - Custom rules and commands
-- **Windsurf** - Cascade integration
-- **VS Code + Copilot** - Workspace commands
-- **Aider** - CLI integration
-- **Any AI Agent** - Just read the agent prompts!
-
-### 4. Three Automation Modes
-
-| Mode | Description | Best For |
-|------|-------------|----------|
-| **Auto** | Full autonomy | Well-defined tasks |
-| **Supervised** | Approval at key points | New features, complex changes |
-| **Manual** | Step-by-step control | Learning, debugging |
-
-### 5. Complete Automation
-```bash
-# Discover specs from idea
-/discover Your project idea here
-
-# Single command implements entire feature
-./RLM/commands/rlm-build.sh --mode auto
-
-# Automatic GitHub sync
-./RLM/commands/rlm-sync.sh both
-
-# Comprehensive testing with auto-fix
-./RLM/commands/rlm-test.sh all --fix
-```
-
-### 6. Comprehensive Observability
-- **Event Logging** - Structured event capture with SQLite persistence
-- **Real-time Monitoring** - Live event streams via CLI and WebSocket
-- **AI Summarization** - Automatic event summarization using Claude Haiku
-- **Web Dashboard** - Real-time visualization and intervention controls
-- **Session Tracking** - Color-coded session identification
-
-```bash
-# Live event monitoring
-./RLM/commands/rlm-observe.sh tail
-
-# Activity summary
-./RLM/commands/rlm-observe.sh summary
-
-# Start web dashboard
-./RLM/commands/rlm-observe-server.sh start
-```
-
-**See [Observability Guide](RLM/docs/OBSERVABILITY.md) for complete details.**
-
-### 7. IDE Agnostic
-Works with: **Claude Code** • **Cursor** • **Windsurf** • **VS Code + Copilot** • **Aider** • **Continue.dev** • **JetBrains AI** • **Any AI Agent**
+- **Vite** - Fast build tool and dev server
+- **Leaflet.js** - Interactive maps
+- **Vanilla JavaScript** - No framework dependencies
+- **CSS3** - Animations, filters, and modern styling
+- **Web Audio API** - Synthesized Christmas music
+- **Canvas API** - Snowfall animation
 
 ---
 
 ## 📁 Project Structure
 
 ```
-your-project/
-├── RLM/                          # AI Agent System
-│   ├── config/                   # System configuration
-│   ├── specs/                    # All specifications
-│   │   ├── constitution.md       # Project standards
-│   │   ├── requirements/         # Business requirements
-│   │   ├── features/             # Feature specs
-│   │   └── architecture/         # Technical design
-│   ├── tasks/                    # Task management
-│   │   ├── active/               # Current tasks
-│   │   ├── completed/            # Finished tasks
-│   │   └── blocked/              # Blocked tasks
-│   ├── progress/                 # Progress tracking
-│   ├── issues/                   # Issue management
-│   ├── agents/                   # Agent prompts
-│   ├── commands/                 # Automation scripts
-│   ├── templates/                # Document templates
-│   └── docs/                     # Documentation
-└── [Your application code]
+santa-tracker/
+├── index.html          # Main HTML file
+├── css/
+│   ├── main.css        # Core styles
+│   ├── animations.css  # Animation keyframes
+│   ├── responsive.css  # Mobile styles
+│   ├── features.css    # Fun feature styles
+│   └── theme-kids.css  # Kid-friendly cartoon theme
+├── js/
+│   ├── app.js          # Main application entry
+│   ├── map.js          # Leaflet map setup & landmarks
+│   ├── santa.js        # Santa tracking & workshop logic
+│   ├── locations.js    # City data & timezones
+│   ├── animations.js   # Snowfall & decorations
+│   ├── features.js     # Fun features (music, sounds, etc.)
+│   ├── panel.js        # Mobile bottom sheet
+│   └── share.js        # Social sharing
+├── package.json
+├── vite.config.js
+└── netlify.toml        # Netlify deployment config
 ```
 
 ---
 
-## 🔧 Core Commands
+## 🎯 How It Works
 
-| Command | Purpose |
-|---------|---------|
-| `/discover` | AI-powered spec generation from ideas (Claude Code) |
-| `rlm-discover` | Discovery script for any IDE |
-| `rlm-init` | Initialize RLM system |
-| `rlm-sync` | Sync with GitHub (bidirectional) |
-| `rlm-build` | Automated implementation |
-| `rlm-test` | Run comprehensive tests |
-| `rlm-report` | Generate progress reports |
-| `rlm-observe` | Monitor agent activities (CLI) |
-| `rlm-observe-server` | Start observability web dashboard |
+### Santa's Journey (December 25th)
+1. Santa starts at a random city
+2. Every 30-60 seconds, he moves to a new location
+3. Each stop delivers 10,000-50,000 presents
+4. Flight paths show his route with animated reindeer
+5. Present markers are left at visited cities
 
-**See [Commands Guide](RLM/docs/RLM-Commands-Guide.md) for full reference.**
-**See [IDE Integration Guide](RLM/docs/IDE-INTEGRATION.md) for setup in your IDE.**
+### Workshop Mode (Other Days)
+1. Santa stays at the North Pole (90°N, 0°E)
+2. Activity messages show what's happening in the workshop
+3. Present counter slowly increases as toys are made
+4. Countdown shows time until Christmas
 
----
-
-## 📚 Documentation
-
-| Document | Description |
-|----------|-------------|
-| [Quick Start](RLM/docs/QUICK-START.md) | 5-minute setup guide |
-| [**IDE Integration**](RLM/docs/IDE-INTEGRATION.md) | **Setup for Claude Code, Cursor, Windsurf, VS Code, Aider** |
-| [User Guide](RLM/docs/RLM-User-Guide.md) | Complete walkthrough from discovery to deployment |
-| [Commands Guide](RLM/docs/RLM-Commands-Guide.md) | Command reference including discover |
-| [Installation](RLM/docs/INSTALLATION.md) | Detailed installation instructions |
-| [Token Tracking](RLM/docs/TOKEN-TRACKING.md) | Cost management and optimization |
-| [**Elite Context Engineering**](RLM/docs/ELITE-CONTEXT-ENGINEERING.md) | **Advanced context management (86% token savings)** |
-| [**Observability**](RLM/docs/OBSERVABILITY.md) | **Complete monitoring and debugging system** |
-| [System Overview](RLM/docs/RLM-System-Overview.md) | Architecture overview |
-| [Project Structure](RLM/docs/RLM-Project-Structure.md) | Directory structure guide |
+### Date Detection
+- The app checks the current date on load
+- Automatically switches modes at midnight
+- Uses local timezone for date detection
 
 ---
 
-## 💡 Example Usage
+## 🌍 Landmarks
 
-### Product Manager Creates Feature Spec
+Discover these famous locations on the map:
 
-```markdown
-# Feature: User Login
+| Landmark | Location | Fun Fact |
+|----------|----------|----------|
+| 🗼 Eiffel Tower | Paris, France | Sparkles with 20,000 lights every night! |
+| 🗽 Statue of Liberty | New York, USA | Wears a size 879 shoe! |
+| 🕐 Big Ben | London, UK | Clock faces are 23 feet wide! |
+| 🕌 Taj Mahal | Agra, India | Changes color throughout the day! |
+| ⛪ Christ the Redeemer | Rio, Brazil | 98 feet tall - like a 10-story building! |
+| 🏛️ Colosseum | Rome, Italy | Could hold 50,000 spectators! |
+| 🗼 Tokyo Tower | Tokyo, Japan | Painted orange and white for air safety! |
+| 🎭 Sydney Opera House | Sydney, Australia | Roof has over 1 million tiles! |
+| 🧱 Great Wall | China | Over 13,000 miles long! |
+| 🔺 Pyramids | Giza, Egypt | Over 4,500 years old! |
+| 🏠 North Pole Village | Arctic | Santa's workshop is here! |
+| 🎄 Santa's Village | Finland | Santa's official hometown! |
 
-## Acceptance Criteria
-- Email/password validation
-- JWT token generation
-- Rate limiting (5 attempts/15min)
-- Session management
+---
 
-## Technical Requirements
-- Endpoint: POST /api/auth/login
-- Security: bcrypt + JWT
-- Performance: < 100ms response
+## 🎨 Customization
+
+### Change the Theme
+Edit `css/theme-kids.css` to customize:
+- Colors (CSS custom properties in `:root`)
+- Fonts
+- Border styles
+- Animation timing
+
+### Add More Landmarks
+Edit the `LANDMARKS` array in `js/map.js`:
+
+```javascript
+{ 
+  lat: 48.8584, 
+  lng: 2.2945, 
+  name: 'Eiffel Tower', 
+  emoji: '🗼', 
+  fact: 'Your fun fact here!' 
+}
 ```
 
-### Developer Runs Automation
+### Add More Cities
+Edit `js/locations.js` to add cities Santa can visit.
 
+---
+
+## 📱 Deployment
+
+### Netlify (Recommended)
+1. Connect your GitHub repo to Netlify
+2. Build command: `npm run build`
+3. Publish directory: `dist`
+
+### GitHub Pages
+1. Enable GitHub Actions in your repo
+2. The included workflow will auto-deploy on push
+
+### Manual
 ```bash
-./RLM/commands/rlm-sync.sh pull    # Pull spec from GitHub
-./RLM/commands/rlm-build.sh --mode supervised  # Build
+npm run build
+# Upload contents of dist/ to your web server
 ```
-
-### AI Agents Execute
-
-- **Master Architect** designs JWT structure and API contract
-- **Implementation Agent** writes tests, implements code
-- **Testing Agent** runs tests, validates coverage
-- **Result**: Production-ready feature in minutes
-
----
-
-## 📈 Benefits
-
-### For Developers
-- ⚡ **10x faster** implementation
-- 🎯 Focus on architecture, not boilerplate
-- ✅ Comprehensive tests automatically generated
-- 📝 Complete documentation created
-- 💰 **86% lower AI costs** with context engineering
-
-### For Product Managers
-- 👁️ Real-time visibility into progress
-- 📊 Accurate velocity metrics
-- 🚫 Early blocker detection
-- 🔄 Fast iteration cycles
-
-### For Teams
-- 🤝 Clear communication via structured specs
-- 📚 Complete knowledge preservation
-- 🔍 Full traceability of decisions
-- ⚙️ Consistent code quality
-- 💰 **Predictable AI costs** with token tracking
-
----
-
-## 🛠️ Technology Stack
-
-### Supported Languages
-- Node.js / TypeScript
-- Python
-- .NET / C#
-- Go
-
-### Supported IDEs
-- Cursor (recommended)
-- Windsurf
-- VS Code + Copilot
-- Kiro
-- Antigravity
-- Claude Code CLI
-
-### AI Models
-- Claude (Anthropic) - recommended
-- GPT-4 (OpenAI)
-- Gemini (Google)
-
----
-
-## 📦 Installation
-
-### Prerequisites
-- Git
-- Node.js 18+ or Python 3.11+
-- AI API key (Anthropic, OpenAI, or Google)
-- GitHub account and token
-
-### Install
-```bash
-# Clone your project
-git clone your-repo
-cd your-project
-
-# Initialize RLM
-./RLM/commands/rlm-init.sh
-
-# Configure
-cp RLM/.env.example .env
-nano .env  # Add credentials
-
-# Verify
-./RLM/commands/rlm-init.sh --check
-```
-
-**See [Installation Guide](RLM/docs/INSTALLATION.md) for detailed instructions.**
-
----
-
-## 🎓 Learning Resources
-
-1. **Read Quick Start** - Get running in 5 minutes
-2. **Review Example** - Check `RLM/specs/features/FTR-001-example/`
-3. **Create Constitution** - Define your project standards
-4. **Write First Spec** - Use templates from `RLM/templates/`
-5. **Run Build** - Try supervised mode first
 
 ---
 
 ## 🤝 Contributing
 
-Contributions welcome! Please:
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Submit a pull request
+Contributions are welcome! Ideas for improvements:
+- [ ] More landmarks and fun facts
+- [ ] Additional languages/translations
+- [ ] More Christmas songs
+- [ ] Mini-games for kids
+- [ ] AR features
 
 ---
 
 ## 📄 License
 
-MIT License - see [LICENSE](LICENSE) file
+MIT License - feel free to use this for your own Christmas projects!
 
 ---
 
-## 🙏 Acknowledgments
+## 🙏 Credits
 
-Built upon research and best practices from:
-- **BMAD Method** - Multi-agent AI development framework
-- **GitHub Spec-Kit** - Spec-driven development toolkit
-- **OpenSpec** - Structured specifications for AI
-- **Kiro IDE** - Spec-driven development approach
-
----
-
-## 📞 Support
-
-- 📚 **Documentation**: `RLM/docs/` directory
-- 🐛 **Issues**: [GitHub Issues](https://github.com/your-org/rlm-system/issues)
-- 💬 **Discussions**: [GitHub Discussions](https://github.com/your-org/rlm-system/discussions)
-- 📧 **Email**: support@rlm-system.dev
+- Map tiles by [CARTO](https://carto.com/) via OpenStreetMap
+- Map library: [Leaflet.js](https://leafletjs.com/)
+- Fonts: [Google Fonts](https://fonts.google.com/) (Fredoka One, Nunito)
+- Inspiration: Google Santa Tracker, NORAD Tracks Santa
 
 ---
 
-## 🌟 Star History
+**Made with ❤️ and holiday cheer! 🎄**
 
-If this project helps you, please consider giving it a ⭐️!
-
----
-
-**Built with ❤️ by developers who believe AI should amplify human creativity, not replace it.**
-
----
-
-## 🚦 Status
-
-- ✅ Core system implemented
-- ✅ Multi-agent orchestration
-- ✅ CI/CD integration
-- ✅ Comprehensive documentation
-- 🚧 Web app for PM (coming soon)
-- 🚧 Advanced analytics dashboard (coming soon)
-
----
-
-**Ready to transform your development workflow?**
-
-```bash
-./RLM/commands/rlm-init.sh && ./RLM/commands/rlm-build.sh --mode supervised
-```
-
-🚀 **Let's build something amazing together!**
-
+*Merry Christmas and Happy Holidays!* 🎅🎁❄️
