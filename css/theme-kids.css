@@ -118,19 +118,27 @@ body {
 }
 
 /* ==========================================
-   MAP STYLING - CARTOON SNOWY WORLD
+   MAP STYLING - SNOWY LAND & ICY WATER
    ========================================== */
 
-/* Keep map visible with subtle winter tint */
+/* Invert dark tiles to create white land and blue water */
 .leaflet-tile-pane {
   filter: 
-    brightness(0.85) 
-    saturate(0.7) 
-    hue-rotate(-10deg) 
-    contrast(1.1);
+    invert(1)              /* Flip colors: dark land -> white, light water -> dark */
+    hue-rotate(180deg)     /* Shift hues back to blue for water */
+    saturate(0.4)          /* Reduce saturation for icy feel */
+    brightness(1.05)       /* Slightly brighter */
+    contrast(0.95);        /* Softer contrast */
 }
 
-/* Add subtle frost overlay to map - NOT too white */
+/* Make the tiles look more snowy/icy */
+.leaflet-tile {
+  filter: 
+    sepia(0.1)             /* Slight warmth */
+    saturate(1.2);         /* Boost the blue in water */
+}
+
+/* Add icy/frosty overlay effect */
 #map::after {
   content: '';
   position: absolute;
@@ -139,11 +147,28 @@ body {
   right: 0;
   bottom: 0;
   background: 
-    radial-gradient(ellipse at 50% 0%, rgba(168, 218, 220, 0.15) 0%, transparent 40%),
-    radial-gradient(circle at 20% 80%, rgba(255,255,255,0.08) 0%, transparent 30%),
-    radial-gradient(circle at 80% 20%, rgba(255,255,255,0.08) 0%, transparent 25%);
+    /* Subtle blue tint for icy atmosphere */
+    linear-gradient(180deg, 
+      rgba(168, 218, 220, 0.1) 0%, 
+      rgba(200, 230, 240, 0.05) 50%,
+      rgba(168, 218, 220, 0.1) 100%
+    ),
+    /* Sparkle/frost texture */
+    radial-gradient(circle at 30% 20%, rgba(255,255,255,0.1) 0%, transparent 20%),
+    radial-gradient(circle at 70% 60%, rgba(255,255,255,0.08) 0%, transparent 15%),
+    radial-gradient(circle at 50% 80%, rgba(255,255,255,0.1) 0%, transparent 20%);
   pointer-events: none;
   z-index: 1;
+}
+
+/* Style the map container for winter theme */
+#map {
+  background: linear-gradient(180deg, 
+    #1a3a5c 0%,    /* Dark blue sky at top */
+    #2d5a7b 30%,   /* Medium blue */
+    #4a7c9b 70%,   /* Lighter blue */
+    #6b9cb8 100%   /* Pale blue at bottom */
+  );
 }
 
 /* ==========================================
