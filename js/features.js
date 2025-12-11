@@ -994,7 +994,18 @@ function nextSong() {
 }
 
 /**
- * Play through the Christmas playlist
+ * Get a random song index (avoiding the current one)
+ */
+function getRandomSongIndex() {
+  let newIndex;
+  do {
+    newIndex = Math.floor(Math.random() * christmasSongs.length);
+  } while (newIndex === currentSongIndex && christmasSongs.length > 1);
+  return newIndex;
+}
+
+/**
+ * Play through the Christmas playlist (random shuffle)
  */
 async function playChristmasPlaylist() {
   if (!audioContext) return;
@@ -1003,6 +1014,9 @@ async function playChristmasPlaylist() {
   masterGain = audioContext.createGain();
   masterGain.gain.value = 0.5; // Good volume
   masterGain.connect(audioContext.destination);
+  
+  // Start with a random song
+  currentSongIndex = Math.floor(Math.random() * christmasSongs.length);
   
   while (state.musicPlaying) {
     const currentSong = christmasSongs[currentSongIndex];
@@ -1018,10 +1032,10 @@ async function playChristmasPlaylist() {
       await sleep(duration);
     }
     
-    // Move to next song after a pause
+    // Pick a random next song after a pause
     if (state.musicPlaying) {
       await sleep(1500); // Pause between songs
-      currentSongIndex = (currentSongIndex + 1) % christmasSongs.length;
+      currentSongIndex = getRandomSongIndex();
       const nextSongObj = christmasSongs[currentSongIndex];
       showToast(`🎵 Now Playing: ${nextSongObj.name}`, 'info');
     }
