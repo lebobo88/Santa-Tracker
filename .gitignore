@@ -2,9 +2,10 @@
 node_modules/
 bower_components/
 jspm_packages/
-package-lock.json
-yarn.lock
-pnpm-lock.yaml
+# Lock files should be committed for reproducible builds
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
 
 # Python
 __pycache__/
