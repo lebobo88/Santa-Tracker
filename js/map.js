@@ -7,6 +7,7 @@
 let map = null;
 let santaMarker = null;
 let visitedMarkers = [];
+let flightPaths = [];
 
 // Map configuration
 const MAP_CONFIG = {
@@ -208,4 +209,93 @@ export function showArrivalEffect(lat, lng) {
       arrivalEffect.innerHTML = '';
     }, 800);
   }
+}
+
+/**
+ * Add flight path between two locations
+ * @param {Object} from - Starting location {lat, lng}
+ * @param {Object} to - Ending location {lat, lng}
+ */
+export function addFlightPath(from, to) {
+  if (!map) return;
+
+  // Limit number of visible paths
+  const MAX_PATHS = 20;
+  if (flightPaths.length >= MAX_PATHS) {
+    const oldPath = flightPaths.shift();
+    map.removeLayer(oldPath);
+  }
+
+  // Calculate great circle path points for curved line
+  const points = calculateGreatCircle(from, to, 50);
+
+  // Create polyline with dashed style
+  const path = L.polyline(points, {
+    color: '#ffd700',
+    weight: 2,
+    opacity: 0.6,
+    dashArray: '10, 5',
+    className: 'flight-path'
+  }).addTo(map);
+
+  // Animate the path appearing
+  path.getElement()?.classList.add('flight-path-animate');
+
+  flightPaths.push(path);
+
+  // Fade out old paths
+  flightPaths.forEach((p, index) => {
+    const opacity = 0.2 + (index / flightPaths.length) * 0.4;
+    p.setStyle({ opacity });
+  });
+}
+
+/**
+ * Calculate points along a great circle path
+ * @param {Object} from - Starting point
+ * @param {Object} to - Ending point
+ * @param {number} numPoints - Number of points to generate
+ * @returns {Array} Array of [lat, lng] points
+ */
+function calculateGreatCircle(from, to, numPoints) {
+  const points = [];
+  const lat1 = from.lat * Math.PI / 180;
+  const lng1 = from.lng * Math.PI / 180;
+  const lat2 = to.lat * Math.PI / 180;
+  const lng2 = to.lng * Math.PI / 180;
+
+  for (let i = 0; i <= numPoints; i++) {
+    const f = i / numPoints;
+    const d = Math.acos(
+      Math.sin(lat1) * Math.sin(lat2) +
+      Math.cos(lat1) * Math.cos(lat2) * Math.cos(lng2 - lng1)
+    );
+
+    if (d === 0) {
+      points.push([from.lat, from.lng]);
+      continue;
+    }
+
+    const A = Math.sin((1 - f) * d) / Math.sin(d);
+    const B = Math.sin(f * d) / Math.sin(d);
+
+    const x = A * Math.cos(lat1) * Math.cos(lng1) + B * Math.cos(lat2) * Math.cos(lng2);
+    const y = A * Math.cos(lat1) * Math.sin(lng1) + B * Math.cos(lat2) * Math.sin(lng2);
+    const z = A * Math.sin(lat1) + B * Math.sin(lat2);
+
+    const lat = Math.atan2(z, Math.sqrt(x * x + y * y)) * 180 / Math.PI;
+    const lng = Math.atan2(y, x) * 180 / Math.PI;
+
+    points.push([lat, lng]);
+  }
+
+  return points;
+}
+
+/**
+ * Clear all flight paths
+ */
+export function clearFlightPaths() {
+  flightPaths.forEach(path => map.removeLayer(path));
+  flightPaths = [];
 }

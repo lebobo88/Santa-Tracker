@@ -8,6 +8,7 @@ import { initSanta } from './santa.js';
 import { initAnimations } from './animations.js';
 import { initShare } from './share.js';
 import { initPanel } from './panel.js';
+import { initFeatures } from './features.js';
 
 // Loading screen element
 let loadingScreen;
@@ -43,6 +44,10 @@ async function init() {
     // Initialize mobile panel controller
     console.log('Initializing panel...');
     initPanel();
+
+    // Initialize fun features
+    console.log('Initializing features...');
+    initFeatures();
 
     // Hide loading screen
     hideLoadingScreen();

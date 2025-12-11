@@ -4,8 +4,9 @@
  */
 
 import { getNewRandomLocation, getLocalTime } from './locations.js';
-import { updateSantaPosition, addVisitedMarker, showArrivalEffect } from './map.js';
+import { updateSantaPosition, addVisitedMarker, showArrivalEffect, addFlightPath } from './map.js';
 import { updatePeekContent } from './panel.js';
+import { onSantaArrival } from './features.js';
 
 // Santa state
 let currentLocation = null;
@@ -57,6 +58,11 @@ function moveToNextLocation(animate = true) {
   // Update map
   updateSantaPosition(currentLocation.lat, currentLocation.lng, animate);
 
+  // Add flight path from previous to current location
+  if (previousLocation && animate) {
+    addFlightPath(previousLocation, currentLocation);
+  }
+
   // Show arrival effect
   if (animate) {
     setTimeout(() => {
@@ -80,10 +86,28 @@ function moveToNextLocation(animate = true) {
     animatePresentsCount(presentsThisStop);
     citiesVisited++;
     updateCitiesCount();
+    
+    // Trigger fun features
+    onSantaArrival(currentLocation, presentsDelivered + presentsThisStop, citiesVisited);
+    
+    // Check for aurora (northern locations)
+    checkAuroraEffect(currentLocation);
   }
 
   // Announce for screen readers
   announceLocation();
+}
+
+/**
+ * Check if we should show aurora effect
+ */
+function checkAuroraEffect(location) {
+  const auroraOverlay = document.getElementById('aurora-overlay');
+  if (!auroraOverlay) return;
+  
+  // Show aurora for locations above 60° latitude
+  const isNorthern = location.lat > 60 || location.lat < -60;
+  auroraOverlay.classList.toggle('visible', isNorthern);
 }
 
 /**
