@@ -4,7 +4,7 @@
 
 A fun, interactive web application that lets kids (and kids at heart) follow Santa Claus as he delivers presents to children worldwide.
 
-[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen)](https://your-deployment-url.netlify.app)
+[![Live Demo](https://santa-tracker-rlm.netlify.app/)](https://santa-tracker-rlm.netlify.app/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ---
@@ -62,7 +62,7 @@ A fun, interactive web application that lets kids (and kids at heart) follow San
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/santa-tracker.git
+git clone https://github.com/lebobo88/santa-tracker.git
 cd santa-tracker
 
 # Install dependencies
