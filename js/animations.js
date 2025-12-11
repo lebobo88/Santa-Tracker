@@ -1,6 +1,6 @@
 /**
  * Santa Tracker - Animations Module
- * Canvas-based snowfall and twinkling stars
+ * Canvas-based snowfall, twinkling stars, and floating decorations
  */
 
 let snowCanvas, snowCtx;
@@ -8,12 +8,15 @@ let snowflakes = [];
 let animationId = null;
 let isReducedMotion = false;
 
-// Snowflake configuration
-const SNOWFLAKE_COUNT = 150;
+// Enhanced snowflake configuration - MORE SNOW!
+const SNOWFLAKE_COUNT = 250;
 const MIN_SIZE = 2;
-const MAX_SIZE = 5;
+const MAX_SIZE = 8;
 const MIN_SPEED = 0.5;
-const MAX_SPEED = 2;
+const MAX_SPEED = 3;
+
+// Floating decorations
+const FLOATING_EMOJIS = ['🎄', '⭐', '🎁', '❄️', '✨', '🔔', '🍪', '🦌', '☃️', '🌟'];
 
 /**
  * Initialize all animations
@@ -32,6 +35,9 @@ export function initAnimations() {
 
   // Initialize twinkling stars
   initStars();
+
+  // Initialize floating decorations
+  initFloatingDecorations();
 
   // Handle resize
   window.addEventListener('resize', handleResize);
@@ -121,7 +127,7 @@ function updateSnowflakes() {
 }
 
 /**
- * Draw snowflakes on canvas
+ * Draw snowflakes on canvas - enhanced with variety
  */
 function drawSnowflakes() {
   if (!snowCtx) return;
@@ -130,12 +136,90 @@ function drawSnowflakes() {
   snowCtx.clearRect(0, 0, snowCanvas.width, snowCanvas.height);
 
   // Draw each snowflake
-  snowflakes.forEach(flake => {
-    snowCtx.beginPath();
-    snowCtx.arc(flake.x, flake.y, flake.size, 0, Math.PI * 2);
-    snowCtx.fillStyle = `rgba(255, 255, 255, ${flake.opacity})`;
-    snowCtx.fill();
+  snowflakes.forEach((flake, index) => {
+    snowCtx.save();
+    snowCtx.translate(flake.x, flake.y);
+    snowCtx.rotate(flake.wobble);
+    
+    // Vary snowflake style based on size
+    if (flake.size > 5) {
+      // Large flakes - draw as star/crystal shape
+      drawSnowflakeCrystal(snowCtx, flake.size, flake.opacity);
+    } else if (flake.size > 3) {
+      // Medium flakes - simple sparkle
+      drawSparkle(snowCtx, flake.size, flake.opacity);
+    } else {
+      // Small flakes - dots with glow
+      snowCtx.beginPath();
+      snowCtx.arc(0, 0, flake.size, 0, Math.PI * 2);
+      snowCtx.fillStyle = `rgba(255, 255, 255, ${flake.opacity})`;
+      snowCtx.shadowColor = 'rgba(255, 255, 255, 0.5)';
+      snowCtx.shadowBlur = 3;
+      snowCtx.fill();
+    }
+    
+    snowCtx.restore();
   });
+}
+
+/**
+ * Draw a snowflake crystal shape
+ */
+function drawSnowflakeCrystal(ctx, size, opacity) {
+  ctx.strokeStyle = `rgba(255, 255, 255, ${opacity})`;
+  ctx.lineWidth = 1.5;
+  ctx.lineCap = 'round';
+  
+  // Draw 6 arms
+  for (let i = 0; i < 6; i++) {
+    ctx.save();
+    ctx.rotate((i * Math.PI) / 3);
+    
+    // Main arm
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.lineTo(0, -size);
+    ctx.stroke();
+    
+    // Small branches
+    ctx.beginPath();
+    ctx.moveTo(0, -size * 0.5);
+    ctx.lineTo(-size * 0.3, -size * 0.7);
+    ctx.moveTo(0, -size * 0.5);
+    ctx.lineTo(size * 0.3, -size * 0.7);
+    ctx.stroke();
+    
+    ctx.restore();
+  }
+}
+
+/**
+ * Draw a sparkle/star shape
+ */
+function drawSparkle(ctx, size, opacity) {
+  ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
+  ctx.shadowColor = 'rgba(255, 255, 255, 0.8)';
+  ctx.shadowBlur = 5;
+  
+  // 4-point star
+  ctx.beginPath();
+  for (let i = 0; i < 4; i++) {
+    const angle = (i * Math.PI) / 2;
+    const outerX = Math.cos(angle) * size;
+    const outerY = Math.sin(angle) * size;
+    const innerAngle = angle + Math.PI / 4;
+    const innerX = Math.cos(innerAngle) * (size * 0.3);
+    const innerY = Math.sin(innerAngle) * (size * 0.3);
+    
+    if (i === 0) {
+      ctx.moveTo(outerX, outerY);
+    } else {
+      ctx.lineTo(outerX, outerY);
+    }
+    ctx.lineTo(innerX, innerY);
+  }
+  ctx.closePath();
+  ctx.fill();
 }
 
 /**
@@ -148,28 +232,82 @@ function initStars() {
   // Clear existing stars
   starsContainer.innerHTML = '';
 
-  // Create stars
-  const starCount = Math.floor((window.innerWidth * window.innerHeight) / 15000);
+  // Create more stars for magical effect
+  const starCount = Math.floor((window.innerWidth * window.innerHeight) / 10000);
 
   for (let i = 0; i < starCount; i++) {
     const star = document.createElement('div');
     star.className = 'star';
 
-    // Random size
+    // Random size - more variety
     const sizeClass = ['small', 'small', 'small', 'medium', 'medium', 'large'][
       Math.floor(Math.random() * 6)
     ];
     star.classList.add(sizeClass);
 
-    // Random position
+    // Random position - only in upper 70% of screen
     star.style.left = `${Math.random() * 100}%`;
-    star.style.top = `${Math.random() * 100}%`;
+    star.style.top = `${Math.random() * 70}%`;
 
     // Random animation timing
     star.style.setProperty('--duration', `${2 + Math.random() * 4}s`);
     star.style.setProperty('--delay', `${Math.random() * 5}s`);
 
     starsContainer.appendChild(star);
+  }
+}
+
+/**
+ * Initialize floating decorations (emojis)
+ */
+function initFloatingDecorations() {
+  const container = document.getElementById('floating-decorations');
+  if (!container) return;
+
+  // Clear existing
+  container.innerHTML = '';
+
+  // Create floating decorations
+  const decorationCount = Math.min(12, Math.floor(window.innerWidth / 150));
+
+  for (let i = 0; i < decorationCount; i++) {
+    const decoration = document.createElement('div');
+    decoration.className = 'floating-decoration';
+    decoration.textContent = FLOATING_EMOJIS[Math.floor(Math.random() * FLOATING_EMOJIS.length)];
+    
+    // Random position around edges
+    const side = Math.floor(Math.random() * 4);
+    switch(side) {
+      case 0: // Top
+        decoration.style.top = `${5 + Math.random() * 15}%`;
+        decoration.style.left = `${10 + Math.random() * 80}%`;
+        break;
+      case 1: // Right
+        decoration.style.top = `${10 + Math.random() * 60}%`;
+        decoration.style.right = `${2 + Math.random() * 10}%`;
+        break;
+      case 2: // Bottom left
+        decoration.style.bottom = `${15 + Math.random() * 20}%`;
+        decoration.style.left = `${2 + Math.random() * 15}%`;
+        break;
+      case 3: // Bottom right
+        decoration.style.bottom = `${15 + Math.random() * 20}%`;
+        decoration.style.right = `${2 + Math.random() * 15}%`;
+        break;
+    }
+    
+    // Random size
+    const size = 1.5 + Math.random() * 1.5;
+    decoration.style.fontSize = `${size}rem`;
+    
+    // Random animation delay and duration
+    decoration.style.animationDelay = `${Math.random() * 10}s`;
+    decoration.style.animationDuration = `${15 + Math.random() * 10}s`;
+    
+    // Slight opacity variation
+    decoration.style.opacity = `${0.6 + Math.random() * 0.4}`;
+    
+    container.appendChild(decoration);
   }
 }
 

@@ -1,0 +1,734 @@
+/* Santa Tracker - Kid-Friendly Cartoon Theme */
+/* Whimsical, playful, magical design for children */
+
+/* ==========================================
+   DESIGN TOKENS - KID-FRIENDLY PALETTE
+   ========================================== */
+
+:root {
+  /* Primary Colors - Warm & Inviting */
+  --color-santa-red: #E63946;
+  --color-santa-red-light: #FF6B6B;
+  --color-santa-red-dark: #C1121F;
+  
+  /* Snow & Ice */
+  --color-snow: #F1FAEE;
+  --color-snow-pure: #FFFFFF;
+  --color-ice-blue: #A8DADC;
+  --color-frost: #E0F4F5;
+  
+  /* Night Sky - Friendly Dark */
+  --color-sky-dark: #1D3557;
+  --color-sky-medium: #457B9D;
+  --color-sky-light: #5C9EAD;
+  
+  /* Magic & Sparkle */
+  --color-gold: #FFD60A;
+  --color-gold-light: #FFE566;
+  --color-magic-purple: #9B5DE5;
+  --color-magic-pink: #F72585;
+  
+  /* Nature & Presents */
+  --color-elf-green: #2A9D8F;
+  --color-tree-green: #264653;
+  --color-present-blue: #4CC9F0;
+  --color-present-orange: #F77F00;
+  
+  /* Rudolph */
+  --color-rudolph-nose: #FF4444;
+  --color-rudolph-glow: rgba(255, 68, 68, 0.6);
+  
+  /* UI Colors */
+  --color-bg-panel: rgba(29, 53, 87, 0.95);
+  --color-bg-card: rgba(255, 255, 255, 0.95);
+  --color-text-dark: #1D3557;
+  --color-text-light: #FFFFFF;
+  --color-text-muted: #A8DADC;
+  
+  /* Typography - Fun & Rounded */
+  --font-display: 'Fredoka One', 'Comic Sans MS', cursive;
+  --font-body: 'Nunito', 'Comic Sans MS', sans-serif;
+  
+  /* Cartoon Borders */
+  --border-cartoon: 4px solid #1D3557;
+  --border-cartoon-light: 3px solid rgba(29, 53, 87, 0.3);
+  
+  /* Shadows - Soft & Playful */
+  --shadow-cartoon: 
+    4px 4px 0px #1D3557,
+    0 10px 30px rgba(29, 53, 87, 0.3);
+  --shadow-soft: 0 8px 32px rgba(29, 53, 87, 0.2);
+  --shadow-glow-gold: 0 0 30px rgba(255, 214, 10, 0.5);
+  --shadow-glow-magic: 0 0 40px rgba(155, 93, 229, 0.4);
+  
+  /* Border Radius - Very Rounded */
+  --radius-cartoon: 20px;
+  --radius-pill: 50px;
+  --radius-circle: 50%;
+  
+  /* Animations */
+  --bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --wobble: cubic-bezier(0.36, 0.07, 0.19, 0.97);
+}
+
+/* ==========================================
+   BASE STYLES - WINTER WONDERLAND
+   ========================================== */
+
+body {
+  font-family: var(--font-body);
+  background: linear-gradient(180deg, 
+    #0a1628 0%, 
+    #1D3557 30%, 
+    #457B9D 70%, 
+    #A8DADC 100%
+  );
+  color: var(--color-text-light);
+  overflow: hidden;
+}
+
+/* Snow-Covered World Overlay */
+#snow-world-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 3;
+  background: 
+    radial-gradient(ellipse at 50% 120%, rgba(255,255,255,0.3) 0%, transparent 50%);
+}
+
+/* Ground Snow Layer */
+.snow-ground {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 15vh;
+  background: linear-gradient(180deg, 
+    transparent 0%,
+    rgba(255, 255, 255, 0.1) 20%,
+    rgba(255, 255, 255, 0.3) 60%,
+    rgba(241, 250, 238, 0.5) 100%
+  );
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* ==========================================
+   MAP STYLING - CARTOON WORLD
+   ========================================== */
+
+/* Warmer, snow-covered map tiles */
+.leaflet-tile-pane {
+  filter: brightness(0.7) saturate(0.6) hue-rotate(-10deg) contrast(1.1);
+}
+
+/* Add snow texture overlay to map */
+#map::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(255,255,255,0.15) 0%, transparent 30%),
+    radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 25%),
+    radial-gradient(circle at 50% 50%, rgba(168, 218, 220, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ==========================================
+   INFO PANEL - CARTOON CARD STYLE
+   ========================================== */
+
+.info-panel {
+  background: var(--color-bg-card);
+  border: var(--border-cartoon);
+  border-radius: var(--radius-cartoon);
+  box-shadow: var(--shadow-cartoon);
+  color: var(--color-text-dark);
+}
+
+/* Cartoon panel header */
+.panel-header {
+  background: linear-gradient(135deg, var(--color-santa-red) 0%, var(--color-santa-red-light) 100%);
+  border-radius: calc(var(--radius-cartoon) - 4px) calc(var(--radius-cartoon) - 4px) 0 0;
+  padding: var(--space-lg);
+  margin: -1px -1px 0 -1px;
+  border-bottom: var(--border-cartoon);
+}
+
+.panel-header .title {
+  font-family: var(--font-display);
+  color: var(--color-snow);
+  text-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+  font-size: 1.6rem;
+}
+
+.panel-header .subtitle {
+  color: rgba(255,255,255,0.9);
+  font-weight: 600;
+}
+
+/* Location display - big and fun */
+.current-location .city {
+  font-family: var(--font-display);
+  color: var(--color-sky-dark);
+  font-size: 1.8rem;
+  text-shadow: none;
+}
+
+.current-location .country {
+  color: var(--color-elf-green);
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+/* Stats - Cartoon badges */
+.stat {
+  background: linear-gradient(135deg, var(--color-frost) 0%, var(--color-snow) 100%);
+  border: 3px solid var(--color-sky-medium);
+  border-radius: var(--radius-cartoon);
+  padding: var(--space-md);
+  transition: transform 0.3s var(--bounce);
+}
+
+.stat:hover {
+  transform: scale(1.05) rotate(-2deg);
+}
+
+.stat-icon {
+  font-size: 2rem;
+  filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.1));
+}
+
+.stat-value {
+  font-family: var(--font-display);
+  color: var(--color-santa-red);
+  font-size: 1.3rem;
+}
+
+.stat-label {
+  color: var(--color-sky-dark);
+  font-weight: 600;
+}
+
+/* Local time - fun clock */
+.local-time {
+  background: var(--color-gold);
+  border: 3px solid var(--color-sky-dark);
+  border-radius: var(--radius-pill);
+  padding: var(--space-sm) var(--space-md);
+}
+
+.local-time .label {
+  color: var(--color-sky-dark);
+  font-weight: 700;
+}
+
+.local-time .time {
+  font-family: var(--font-display);
+  color: var(--color-sky-dark);
+  font-size: 1.3rem;
+}
+
+/* Countdown - exciting! */
+.next-location .countdown {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  color: var(--color-santa-red);
+  animation: countdownPulse 1s ease-in-out infinite;
+}
+
+@keyframes countdownPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+/* ==========================================
+   BUTTONS - CHUNKY CARTOON STYLE
+   ========================================== */
+
+.share-btn {
+  background: var(--color-elf-green);
+  border: 3px solid var(--color-sky-dark);
+  border-radius: var(--radius-cartoon);
+  box-shadow: 3px 3px 0px var(--color-sky-dark);
+  transition: all 0.2s var(--bounce);
+  width: 52px;
+  height: 52px;
+}
+
+.share-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 3px 6px 0px var(--color-sky-dark);
+}
+
+.share-btn:active {
+  transform: translateY(0);
+  box-shadow: 1px 1px 0px var(--color-sky-dark);
+}
+
+.share-btn.twitter {
+  background: var(--color-present-blue);
+}
+
+.share-btn.facebook {
+  background: var(--color-sky-medium);
+}
+
+.share-btn.copy {
+  background: var(--color-gold);
+}
+
+/* Sound & Music toggles */
+.sound-toggle,
+.music-toggle {
+  background: var(--color-magic-purple);
+  border: 3px solid var(--color-sky-dark);
+  border-radius: var(--radius-cartoon);
+  box-shadow: 3px 3px 0px var(--color-sky-dark);
+  font-size: 1.5rem;
+  width: 52px;
+  height: 52px;
+  transition: all 0.2s var(--bounce);
+}
+
+.sound-toggle:hover,
+.music-toggle:hover {
+  transform: translateY(-3px) rotate(5deg);
+  box-shadow: 3px 6px 0px var(--color-sky-dark);
+}
+
+.music-toggle.playing {
+  background: var(--color-gold);
+  animation: musicBounce 0.5s var(--bounce) infinite;
+}
+
+@keyframes musicBounce {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-2px) rotate(-5deg); }
+  75% { transform: translateY(-2px) rotate(5deg); }
+}
+
+/* ==========================================
+   SANTA MARKER - CARTOON SLEIGH
+   ========================================== */
+
+.santa-icon {
+  font-size: 3.5rem;
+  filter: drop-shadow(3px 3px 0px rgba(0,0,0,0.3));
+  animation: santaFloat 3s ease-in-out infinite;
+}
+
+@keyframes santaFloat {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(-10px) rotate(2deg); }
+}
+
+.santa-icon.flying {
+  animation: santaFlyAway 1s var(--bounce);
+}
+
+@keyframes santaFlyAway {
+  0% { transform: scale(1) rotate(0deg); }
+  30% { transform: scale(1.2) rotate(-10deg) translateY(-20px); }
+  100% { transform: scale(1) rotate(0deg) translateY(0); }
+}
+
+/* Visited markers - bouncy presents */
+.visited-marker {
+  font-size: 1.8rem;
+  animation: presentDrop 0.6s var(--bounce);
+  filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.2));
+}
+
+@keyframes presentDrop {
+  0% { transform: translateY(-50px) rotate(180deg); opacity: 0; }
+  60% { transform: translateY(10px) rotate(-10deg); }
+  100% { transform: translateY(0) rotate(0deg); opacity: 1; }
+}
+
+/* ==========================================
+   FEATURES PANEL - FUN STATS BAR
+   ========================================== */
+
+.features-panel {
+  background: var(--color-bg-card);
+  border: var(--border-cartoon);
+  border-radius: var(--radius-pill);
+  padding: var(--space-xs) var(--space-sm);
+  box-shadow: var(--shadow-cartoon);
+}
+
+.feature-item {
+  background: transparent;
+  border: none;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-pill);
+  transition: all 0.2s var(--bounce);
+}
+
+.feature-item:hover {
+  background: var(--color-frost);
+  transform: scale(1.1);
+}
+
+.feature-emoji {
+  font-size: 1.4rem;
+}
+
+.feature-value {
+  font-family: var(--font-display);
+  color: var(--color-santa-red);
+  font-size: 0.95rem;
+}
+
+/* ==========================================
+   CHRISTMAS COUNTDOWN - EXCITING DISPLAY
+   ========================================== */
+
+.christmas-countdown {
+  background: linear-gradient(135deg, var(--color-santa-red) 0%, var(--color-magic-pink) 100%);
+  border: var(--border-cartoon);
+  border-radius: var(--radius-cartoon);
+  box-shadow: var(--shadow-cartoon);
+  padding: var(--space-md);
+}
+
+.countdown-label {
+  color: var(--color-snow);
+  font-weight: 700;
+  font-size: 0.8rem;
+}
+
+.countdown-time {
+  font-family: var(--font-display);
+  color: var(--color-gold);
+  font-size: 1.4rem;
+  text-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+}
+
+/* ==========================================
+   GIFT DISPLAY - BIG & EXCITING
+   ========================================== */
+
+.gift-display {
+  background: var(--color-bg-card);
+  border: 4px solid var(--color-gold);
+  border-radius: var(--radius-cartoon);
+  box-shadow: 
+    5px 5px 0px var(--color-sky-dark),
+    var(--shadow-glow-gold);
+  padding: var(--space-lg) var(--space-xl);
+}
+
+.gift-emoji {
+  font-size: 4rem;
+  animation: giftWobble 0.5s var(--wobble) infinite;
+}
+
+@keyframes giftWobble {
+  0%, 100% { transform: rotate(-5deg); }
+  50% { transform: rotate(5deg); }
+}
+
+.gift-text {
+  font-family: var(--font-display);
+  color: var(--color-sky-dark);
+  font-size: 1.4rem;
+}
+
+.gift-text span {
+  color: var(--color-santa-red);
+}
+
+/* ==========================================
+   FUN FACTS - SPEECH BUBBLE STYLE
+   ========================================== */
+
+.fun-fact {
+  background: var(--color-gold);
+  border: var(--border-cartoon);
+  border-radius: var(--radius-cartoon);
+  box-shadow: var(--shadow-cartoon);
+  position: relative;
+}
+
+.fun-fact::before {
+  content: '';
+  position: absolute;
+  bottom: -15px;
+  left: 30px;
+  width: 0;
+  height: 0;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-top: 15px solid var(--color-sky-dark);
+}
+
+.fun-fact::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 33px;
+  width: 0;
+  height: 0;
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-top: 12px solid var(--color-gold);
+}
+
+.fact-icon {
+  font-size: 1.5rem;
+}
+
+.fact-text {
+  color: var(--color-sky-dark);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+/* ==========================================
+   ACHIEVEMENTS - TROPHY STYLE
+   ========================================== */
+
+.achievement-popup {
+  background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-gold-light) 100%);
+  border: 4px solid var(--color-sky-dark);
+  border-radius: var(--radius-cartoon);
+  box-shadow: 
+    5px 5px 0px var(--color-sky-dark),
+    var(--shadow-glow-gold);
+}
+
+.achievement-emoji {
+  font-size: 4rem;
+  animation: trophySpin 1s var(--bounce);
+}
+
+@keyframes trophySpin {
+  0% { transform: scale(0) rotate(-180deg); }
+  60% { transform: scale(1.2) rotate(10deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+.achievement-title {
+  color: var(--color-sky-dark);
+  font-weight: 700;
+}
+
+.achievement-name {
+  font-family: var(--font-display);
+  color: var(--color-santa-red);
+  font-size: 1.5rem;
+}
+
+/* ==========================================
+   TOAST NOTIFICATIONS - CARTOON BUBBLES
+   ========================================== */
+
+.toast {
+  background: var(--color-bg-card);
+  border: var(--border-cartoon);
+  border-radius: var(--radius-cartoon);
+  box-shadow: var(--shadow-cartoon);
+  color: var(--color-sky-dark);
+  font-weight: 600;
+}
+
+.toast-santa {
+  background: linear-gradient(135deg, var(--color-santa-red-light) 0%, var(--color-santa-red) 100%);
+  color: var(--color-snow);
+  border-color: var(--color-santa-red-dark);
+}
+
+.toast-milestone {
+  background: var(--color-gold);
+  color: var(--color-sky-dark);
+}
+
+/* ==========================================
+   LOADING SCREEN - PLAYFUL ANIMATION
+   ========================================== */
+
+.loading-screen {
+  background: linear-gradient(180deg, 
+    #1D3557 0%, 
+    #457B9D 50%, 
+    #A8DADC 100%
+  );
+}
+
+.loading-santa {
+  font-size: 6rem;
+  animation: loadingSantaBounce 1s var(--bounce) infinite;
+}
+
+@keyframes loadingSantaBounce {
+  0%, 100% { transform: translateY(0) rotate(-5deg); }
+  50% { transform: translateY(-30px) rotate(5deg); }
+}
+
+.loading-content h1 {
+  font-family: var(--font-display);
+  color: var(--color-gold);
+  font-size: 3rem;
+  text-shadow: 3px 3px 0px rgba(0,0,0,0.2);
+}
+
+.loading-dots span {
+  width: 16px;
+  height: 16px;
+  background: var(--color-gold);
+  border: 2px solid var(--color-sky-dark);
+}
+
+/* ==========================================
+   AURORA - MORE MAGICAL
+   ========================================== */
+
+.aurora-overlay.visible {
+  opacity: 1;
+  background: linear-gradient(
+    180deg,
+    rgba(155, 93, 229, 0.2) 0%,
+    rgba(247, 37, 133, 0.15) 20%,
+    rgba(76, 201, 240, 0.1) 40%,
+    rgba(42, 157, 143, 0.05) 60%,
+    transparent 100%
+  );
+  animation: auroraShimmer 4s ease-in-out infinite;
+}
+
+@keyframes auroraShimmer {
+  0%, 100% { opacity: 0.8; filter: hue-rotate(0deg); }
+  50% { opacity: 1; filter: hue-rotate(20deg); }
+}
+
+/* ==========================================
+   FLOATING DECORATIONS
+   ========================================== */
+
+.floating-decoration {
+  position: fixed;
+  pointer-events: none;
+  z-index: 4;
+  animation: floatAround 20s ease-in-out infinite;
+}
+
+@keyframes floatAround {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  25% { transform: translate(10px, -20px) rotate(5deg); }
+  50% { transform: translate(-5px, -10px) rotate(-3deg); }
+  75% { transform: translate(15px, -15px) rotate(8deg); }
+}
+
+/* ==========================================
+   SNOWFLAKES - ENHANCED
+   ========================================== */
+
+.snowflake {
+  position: fixed;
+  color: white;
+  text-shadow: 0 0 10px rgba(255,255,255,0.8);
+  pointer-events: none;
+  z-index: 5;
+  animation: snowfall linear infinite;
+}
+
+@keyframes snowfall {
+  0% {
+    transform: translateY(-10vh) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(110vh) rotate(360deg);
+    opacity: 0.3;
+  }
+}
+
+/* ==========================================
+   MOBILE PEEK BAR - FUN STYLE
+   ========================================== */
+
+@media (max-width: 767px) {
+  .panel-peek {
+    background: linear-gradient(135deg, var(--color-santa-red) 0%, var(--color-santa-red-light) 100%);
+    border-radius: var(--radius-cartoon) var(--radius-cartoon) 0 0;
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .peek-city {
+    font-family: var(--font-display);
+    color: var(--color-snow);
+    text-shadow: 1px 1px 0px rgba(0,0,0,0.2);
+  }
+
+  .peek-country {
+    color: var(--color-gold);
+  }
+
+  .peek-time {
+    font-family: var(--font-display);
+    color: var(--color-gold);
+    text-shadow: 1px 1px 0px rgba(0,0,0,0.2);
+  }
+
+  .handle-bar {
+    background: var(--color-snow);
+    width: 50px;
+    height: 5px;
+  }
+
+  .info-panel {
+    border-radius: var(--radius-cartoon) var(--radius-cartoon) 0 0;
+  }
+
+  .panel-content {
+    background: var(--color-bg-card);
+  }
+}
+
+/* ==========================================
+   ZOOM CONTROLS - CARTOON BUTTONS
+   ========================================== */
+
+.leaflet-control-zoom a {
+  background: var(--color-bg-card) !important;
+  border: 3px solid var(--color-sky-dark) !important;
+  color: var(--color-sky-dark) !important;
+  font-family: var(--font-display) !important;
+  font-size: 20px !important;
+  width: 44px !important;
+  height: 44px !important;
+  line-height: 38px !important;
+  border-radius: var(--radius-cartoon) !important;
+  box-shadow: 2px 2px 0px var(--color-sky-dark) !important;
+  transition: all 0.2s var(--bounce) !important;
+}
+
+.leaflet-control-zoom a:hover {
+  background: var(--color-frost) !important;
+  transform: scale(1.1) !important;
+}
+
+.leaflet-control-zoom {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.leaflet-control-zoom-in {
+  border-radius: var(--radius-cartoon) var(--radius-cartoon) 0 0 !important;
+  margin-bottom: -3px !important;
+}
+
+.leaflet-control-zoom-out {
+  border-radius: 0 0 var(--radius-cartoon) var(--radius-cartoon) !important;
+}
+
